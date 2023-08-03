@@ -131,6 +131,11 @@ function sendcq() {
 	fclose ( $fp );
 	return $sendcq = "1";
 }
+$csvPath =  __DIR__ . '/cty.csv';
+if (! file_exists ( $csvPath )) {
+	$csvData = file_get_contents ( 'https://www.country-files.com/bigcty/cty.csv' );
+	file_put_contents ( $csvPath, $csvData );
+}
 function load_cty_array() {
 	$cty_array = array ();
 	$dirt = __DIR__ . '/cty.csv';
@@ -183,7 +188,7 @@ echo "$robot forward to 127.0.0.1 port udp 2277\n\r";
 echo fg ( "##################################################################", 1 );
 sleep ( 1 );
 echo " -----> Loading LOTW ";
-$csvPath = 'lotw-user-activity.csv';
+$csvPath =  __DIR__ . '/lotw-user-activity.csv';
 if (! file_exists ( $csvPath )) {
 	$csvData = file_get_contents ( 'https://lotw.arrl.org/lotw-user-activity.csv' );
 	file_put_contents ( $csvPath, $csvData );
