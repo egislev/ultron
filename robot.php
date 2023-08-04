@@ -36,7 +36,7 @@
  * "I am not responsible for the use or inability to use this software or any other."
  * --------------------------------------------------------------------------
  */
-// error_reporting(0);
+error_reporting(0);
 date_default_timezone_set ( "UTC" );
 $sendcq = "0";
 $zz = "   ";
@@ -93,6 +93,8 @@ function fg($text, $color) {
 	}
 	return chr ( 27 ) . "$out" . "$text" . chr ( 27 ) . "[0m\n\r";
 }
+echo "\n\r";
+echo "\n\r";
 echo fg ( "##################################################################", 1 );
 echo " Created by Eduardo Castillo - LU9DCE\n\r";
 echo " (C) 2023 - castilloeduardo@outlook.com.ar\n\r";
@@ -437,6 +439,7 @@ $tempu = $tempo + 90;
 goto trama;
 tcin:
 echo fg ( "$robot Successful contact @ $dxc", 2 );
+shell_exec('play beep.wav  > /dev/null 2>&1');
 goto trama;
 toch:
 $fp = stream_socket_client ( "udp://$ipft:$portrx", $errno, $errstr );
@@ -700,6 +703,7 @@ while ( true ) {
 socket_close ( $socket );
 tdoce:
 echo fg ( "$robot Successful contact @ $dxc", 2 );
+//shell_exec('play -n synth 1 sine 1200 > /dev/null 2>&1');
 $datos = hex2bin ( $lee );
 $lineas = explode ( "\n", $datos );
 $linea_encontrada = '';
