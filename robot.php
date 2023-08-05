@@ -9,37 +9,49 @@
  * (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  *
  * Description:
- * ULTRON is a software tool designed for remotely or locally controlling
- * programs like JTDX, MSHV, and WSJT-X. It is capable of running on both
+ * ULTRON is a software tool designed for remote or local control of
+ * programs such as JTDX, MSHV, and WSJT-X. It operates seamlessly on
  * Windows and Linux platforms, supporting both 32-bit and 64-bit versions.
- * The software requires the latest version of PHP to operate.
+ * The software requires PHP's latest version for proper functionality.
  *
  * Requirements:
- * Before using ULTRON, make sure you have the following:
- * - Latest version of PHP installed
- * - List of required PHP modules (located at the end of the script)
- * - Radio software properly configured for optimal performance
+ * Before utilizing ULTRON, ensure the following are in place:
+ * - Latest PHP version installed
+ * - List of required PHP modules (specified at script's end)
+ * - Properly configured radio software for optimal performance
  * - Recommendations for optimal usage:
  *   - Disable the Tx watchdog
- *   - Set the UDP server to point to the IP where this program is located
- *   - Enable sending logged QSO ADIF data
+ *   - Configure the UDP server to target the program's IP location
+ *   - Enable transmission of logged QSO ADIF data
  *   - Do not filter UDP data
- *   - Adjust your firewall to allow data to pass through
- * To ensure that ULTRON makes calls only to contacts that belong to LoTW
- * (Logbook of The World), create an empty file in the same folder named "lotw".
+ *   - Adjust firewall settings to facilitate data flow
+ *
+ * To ensure ULTRON makes calls only to LoTW (Logbook of The World) contacts,
+ * create an empty "lotw" file in the same folder.
+ *
+ * Details:
+ * - ULTRON operates in real-time, enabling software switches without restarts.
+ *   It automatically detects your call sign, IP address, and communication ports.
+ * - ULTRON employs its own logbook, though you can use your own by placing it
+ *   in the "wsjtx_log.adi" folder within ULTRON, separate from other software.
+ * - Additionally, ULTRON responds to more than just CQ calls; it identifies
+ *   messages like 73 or RR73 and discerns if correspondents are busy or unresponsive.
+ * - Unresponsive correspondents are waitlisted for 30 minutes before a QSO retry.
+ * - Signals weaker than -20dB are considered less likely to result in successful QSOs.
  *
  * Terminal and Color Support:
- * ULTRON requires a terminal that supports ASCII color. You can use either
- * the Linux terminal or the new Windows 10 or 11 terminal, both of which
- * support ASCII color. If you're unable to see colors in Windows, it
- * is recommended to use [ConEmu](https://conemu.github.io/) for an enhanced experience.
+ * ULTRON requires a terminal supporting ASCII color. Utilize Linux or the new
+ * Windows 10/11 terminal, both of which support ASCII color. For color on
+ * Windows, use [ConEmu](https://conemu.github.io/) for an enhanced experience.
  *
- * Raspberry Pi LED Control:
- * To control the LEDs of a Raspberry Pi, you will need to use the `sudo`
- * command. Ensure that it is configured not to require a password.
+ * Raspberry Pi:
+ * To control Raspberry Pi LEDs, use the `sudo` command, configured without password prompt.
+ * The green LED lights up for each decoding, turning off when inactive.
+ * The red LED exhibits a heartbeat-like effect during QSOs.
+ * Conducting a QSO emits an audible tone if a speaker is connected to the Pi's jack.
  *
  * Disclaimer:
- * "I am not responsible for the use or inability to use this software or any other."
+ * "I am not liable for the use or inability to use this software or any other."
  */
 error_reporting(0);
 date_default_timezone_set("UTC");
@@ -60,6 +72,7 @@ static $tropa;
 $memoryUsageBytes = memory_get_usage();
 $version = "LR-230803";
 $portrx = "";
+$beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
 if (! file_exists($filename)) {
     file_put_contents($filename, '');
@@ -105,19 +118,14 @@ echo fg("##################################################################", 1)
 echo " Created by Eduardo Castillo - LU9DCE\n\r";
 echo " (C) 2023 - castilloeduardo@outlook.com.ar\n\r";
 echo fg("------------------------------------------------------------------", 1);
-sleep(1);
 echo "$robot Preparing :";
-sleep(1);
 echo " Version $version\n\r";
 echo " Looking for radio software wait ...";
-sleep(1);
 goto test;
 contr:
 echo fg("------------------------------------------------------------------", 5);
-sleep(1);
 echo "$robot Ctrl + C to exit\n\r";
 echo fg("##################################################################", 1);
-sleep(1);
 echo " -----> Info\n\r";
 echo " -----> CQ active (0=NO/1=YES) - N\n\r";
 echo " -----> Response time          - NNNN\n\r";
@@ -126,7 +134,6 @@ echo " -----> Current time           - NNNN\n\r";
 echo " -----> Contacts made          - NN\n\r";
 echo " -----> Memory usage (MB)      - NNN\n\r";
 echo fg("##################################################################", 1);
-sleep(1);
 echo " ADI    : $adix\n\r";
 echo " PortRx : $portrx\n\r";
 echo fg("##################################################################", 4);
@@ -193,11 +200,9 @@ fclose($fileHandle);
 echo "$robot Watchdog = 90s\n\r";
 echo "$robot Pls disable watchdog of $soft\n\r";
 echo fg("##################################################################", 4);
-sleep(1);
 echo "$robot $ipft port udp 2237\n\r";
 echo "$robot forward to 127.0.0.1 port udp 2277\n\r";
 echo fg("##################################################################", 1);
-sleep(1);
 echo " -----> Loading LOTW ";
 $csvPath =  __DIR__ . '/lotw-user-activity.csv';
 if (! file_exists($csvPath)) {
@@ -261,7 +266,7 @@ if ($type == "00000002") {
     goto tdos;
 }
 if ($type == "00000005") {
-    shell_exec('play -n synth 1 sine 1200 > /dev/null 2>&1');
+    shell_exec($beep);
 }
 if ($type == "0000000c") {
     goto tdoce;
@@ -667,7 +672,6 @@ while (true) {
         echo " Grid : $datagrid\n\r";
         echo " Mode : $datamode\n\r";
         echo " Freq : $datafreq\n\r";
-        sleep(1);
         $isRaspberryPi = false;
         echo fg("------------------------------------------------------------------", 5);
         if (stripos(PHP_OS, 'Linux') !== false) {
