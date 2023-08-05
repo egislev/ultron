@@ -1,39 +1,45 @@
-# Automatic Control of JTDX/WSJT-X/MSHV - ULTRON
+# ULTRON - Automatic Control of JTDX/WSJT-X/MSHV 🤖
 
 **Created by:** LU9DCE  
 **Copyright:** 2023 Eduardo Castillo  
 **Contact:** castilloeduardo@outlook.com.ar  
 **License:** [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
-## Description
+## 📜 Description
 
-ULTRON is a software tool designed for remotely or locally controlling programs like JTDX, MSHV, and WSJT-X. It is capable of running on both Windows and Linux platforms, supporting both 32-bit and 64-bit versions. The software requires the latest version of PHP to operate.
+ULTRON is a sophisticated software tool designed for **remotely or locally controlling programs like JTDX, MSHV, and WSJT-X**. It offers seamless operation on both **Windows and Linux platforms**, supporting both 32-bit and 64-bit versions. The software relies on the **latest version of PHP** for optimal performance.
 
-## Requirements
+## 🔧 Requirements
 
-Before using ULTRON, make sure you have the following:
-
-- Latest version of PHP installed
-- List of required PHP modules (located at the end of the script)
-- Radio software properly configured for optimal performance
+Before utilizing ULTRON, please ensure the following prerequisites are met:
+- Latest version of **PHP** installed
+- List of required **PHP modules** (specified at the end of the script)
+- Properly configured radio software for optimal performance
 - Recommendations for optimal usage:
   - Disable the Tx watchdog
-  - Set the UDP server to point to the IP where this program is located
-  - Enable sending logged QSO ADIF data
+  - Configure the UDP server to target the program's IP location
+  - Enable transmission of logged QSO ADIF data
   - Do not filter UDP data
-  - Adjust your firewall to allow data to pass through
+  - Adjust firewall settings to facilitate data flow
 
-To ensure that ULTRON makes calls only to contacts that belong to LoTW (Logbook of The World), create an empty file in the same folder named "lotw".
+To ensure ULTRON makes calls only to contacts belonging to **LoTW (Logbook of The World)**, create an empty file named "**lotw**" within the same folder.
 
-## Terminal and Color Support
+## 📋 Details
 
-ULTRON requires a terminal that supports ASCII color. You can use either the Linux terminal or the new Windows 10 or 11 terminal, both of which support ASCII color. If you're unable to see colors in Windows, it is recommended to use [ConEmu](https://conemu.github.io/) for an enhanced experience.
+- ULTRON operates in **real-time**, allowing seamless software switches without requiring restarts. It automatically detects your **call sign**, **IP address**, and communication ports.
+- ULTRON uses its own **logbook**, but you can provide your own by placing it in the "**wsjtx_log.adi**" folder within ULTRON. This logbook remains separate from other software.
+- In addition to calling CQ, ULTRON recognizes messages like **73** or **RR73** and determines if correspondents are busy or unresponsive.
+- If a correspondent doesn't respond, they will be **waitlisted for 30 minutes** before a QSO retry.
+- Signals weaker than **-20dB** are considered less likely to result in successful QSOs.
 
-## Raspberry Pi LED Control
+## 🌈 Terminal and Color Support
 
-To control the LEDs of a Raspberry Pi, you will need to use the `sudo` command. Ensure that it is configured not to require a password.
+ULTRON requires a terminal with **ASCII color support**. You can use the **Linux terminal** or the new **Windows 10/11 terminal**, both of which support ASCII color. For color support on Windows, consider using [**ConEmu**](https://conemu.github.io/) for an enhanced experience.
 
-## Disclaimer
+## 🍓 Raspberry Pi
 
-"I am not responsible for the use or inability to use this software or any other."
+To control Raspberry Pi LEDs, use the `sudo` command configured without a password prompt. The **green LED** lights up for each decoding and turns off when inactive. The **red LED** exhibits a heartbeat-like effect during QSOs. Conducting a QSO emits an audible tone if a speaker is connected to the Pi's jack.
 
+## ⚠️ Disclaimer
+
+"I am not liable for the use or inability to use this software or any other."
