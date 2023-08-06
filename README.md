@@ -92,3 +92,41 @@ Thank you for using ULTRON!
 ## ⚠️ Disclaimer
 
 "I am not liable for the use or inability to use this software or any other."
+
+## 😎 PHP
+
+**Windows:**
+
+**PHP Installation:**
+
+1. Download the PHP installer for Windows from the official PHP website (https://windows.php.net/download/).
+2. Run the installer and follow the instructions to complete the installation. Make sure to add the PHP installation path to the system PATH during installation.
+
+**Adjust php.ini (if needed):**
+
+If your "robot.php" script requires specific configurations in the php.ini file, such as memory settings or execution limits, open the php.ini file in a text editor and make the necessary changes.
+
+**Running the Script:**
+
+1. Open the Command Prompt (cmd.exe).
+2. Navigate to the location where your "robot.php" file is located using the cd path\to\the\file command.
+3. Execute the script using the php robot.php command.
+
+**Linux:**
+
+**PHP Installation:**
+
+1. Open the terminal.
+2. Execute the following command to install PHP: sudo apt-get install php (for Debian/Ubuntu-based systems).
+3. Alternatively, use the appropriate command for your system and package manager.
+
+**Adjust php.ini (if needed):**
+
+If your "robot.php" script requires specific configurations in the php.ini file, open the php.ini file in a terminal-based text editor like nano or vim, and make the necessary changes.
+
+**Running the Script:**
+
+1. In the terminal, navigate to the location where your "robot.php" file is located using the cd path/to/the/file command.
+2. Run the script using the php robot.php command.
+
+Ensure that the "robot.php" file contains the PHP code you want to execute. If you need to adjust the php.ini file, make sure to do so before running the script so that the configurations take effect.
