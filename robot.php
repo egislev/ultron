@@ -611,7 +611,6 @@ if (strpos($lotw, $lin [1]) !== false) {
     $lotd = "[ ]";
     $lotdc = "0";
 }
-
 if (sizeof($lin) == 4) {
     unset($lin [1]);
     $lin = array_values($lin);
@@ -671,7 +670,6 @@ $qq = "$timed  $snrd  $deltafd $moded$zz$messaged  - $lotd $qio";
 if ($led) {
     shell_exec($ledvoff);
 }
-
 echo fg($qq, $fg);
 if ($lin [0] != $decalld && $lin [0] != "CQ" && $lin [1] == $dxc && ($lin [2] != "73" || $lin [2] != "RR73")) {
     echo fg("$robot Busy?", 4);
@@ -861,7 +859,6 @@ if (preg_match($pattern, $outputadi, $matches)) {
 }
 $contents .= $dxc . " ";
 goto trama;
-
 /*
 [PHP Modules]
 calendar
