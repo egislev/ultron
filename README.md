@@ -5,6 +5,8 @@
 **Contact:** castilloeduardo@outlook.com.ar  
 **License:** [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
+![ultron](https://pbs.twimg.com/media/F23jEfzWYAApY9t?format=webp&name=small)
+
 ## 📜 Description
 
 ULTRON is a sophisticated software tool designed for **remotely or locally controlling programs like JTDX, MSHV, and WSJT-X**. It offers seamless operation on both **Windows and Linux platforms**, supporting both 32-bit and 64-bit versions. The software relies on the **latest version of PHP** for optimal performance.
