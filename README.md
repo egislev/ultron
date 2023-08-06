@@ -130,3 +130,22 @@ If your "robot.php" script requires specific configurations in the php.ini file,
 2. Run the script using the php robot.php command.
 
 Ensure that the "robot.php" file contains the PHP code you want to execute. If you need to adjust the php.ini file, make sure to do so before running the script so that the configurations take effect.
+
+## 🙋‍♂️ Thinking
+
+Ultron was developed by me for me and some friends. It requires the user to have prior knowledge in using PHP and knowing how to use a Windows or Linux terminal. That's no longer up to me, but I guarantee you Ultron works very well. It can operate for years without the need for intervention.
+
+**Why PHP!** Because it runs on any operating system and no compilation is needed. The script is just text with commands. Ultron will execute on any device that can run PHP (PC/CELLPHONE/ROUTER... ETC).
+
+## 🖥️ Devices that Can Run PHP
+
+- Personal Computers (PC) with Windows, macOS, or Linux.
+- Smartphones and tablets with iOS, Android, etc.
+- Web servers (Linux, Windows Server, etc.).
+- Network devices (routers, switches, etc.).
+- Internet of Things (IoT) devices with processing capabilities.
+- Development boards like Raspberry Pi (Linux).
+- Modified gaming consoles.
+- Smart TVs and multimedia devices.
+- Some printers and multifunctional devices.
+- Industrial control systems and embedded devices.
