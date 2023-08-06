@@ -55,6 +55,7 @@ To ensure ULTRON makes calls only to contacts belonging to **LoTW (Logbook of Th
 - In addition to calling CQ, ULTRON recognizes messages like **73** or **RR73** and determines if correspondents are busy or unresponsive.
 - If a correspondent doesn't respond, they will be **waitlisted for 30 minutes** before a QSO retry.
 - Signals weaker than **-20dB** are considered less likely to result in successful QSOs.
+- The logged ADIF message is sent to ULTRON when the WSJT-X user accepts the "Log  QSO" dialog by clicking the "OK" button.
 
 ## 🌈 Terminal and Color Support
 
@@ -63,6 +64,30 @@ ULTRON requires a terminal with **ASCII color support**. You can use the **Linux
 ## 🍓 Raspberry Pi
 
 To control Raspberry Pi LEDs, use the `sudo` command configured without a password prompt. The **green LED** lights up for each decoding and turns off when inactive. The **red LED** exhibits a heartbeat-like effect during QSOs. Conducting a QSO emits an audible tone if a speaker is connected to the Pi's jack.
+
+## 💻 ULTRON Execution Instructions
+
+To run ULTRON on both Windows and Linux, you have several options:
+
+1. **Terminal Execution:**
+   You can execute ULTRON directly through the terminal by running the following command: `php robot.php`
+
+2. **Batch Script (Windows) or Shell Script (Linux):**
+Alternatively, you can create a batch script (.BAT) for Windows or a shell script (.sh) for Linux with the necessary commands to execute ULTRON.
+
+3. **Task Scheduler:**
+You may also utilize a task scheduler to run ULTRON in the background upon system startup.
+
+Please note the following important considerations:
+
+- ULTRON requires specific modules. Please ensure that you have the required modules installed. Refer to the "robot.php" file for the list of requirements.
+- Make necessary modifications to the "php.ini" configuration to meet the requirements of ULTRON.
+
+For reference, an example "php.ini" configuration is provided in the "extras" folder.
+
+For any further assistance, please refer to the documentation or contact our support team.
+
+Thank you for using ULTRON!
 
 ## ⚠️ Disclaimer
 
