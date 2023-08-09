@@ -33,7 +33,7 @@ static $iaia;
 static $exclu;
 static $tropa;
 $memoryUsageBytes = memory_get_usage();
-$version = "LR-230803";
+$version = "LR-230809";
 $portrx = "";
 $beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
