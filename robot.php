@@ -97,7 +97,7 @@ echo " -----> Contacts made          - NN\n\r";
 echo " -----> Memory usage (MB)      - NNN\n\r";
 echo fg("##################################################################", 1);
 echo " ADI    : $adix\n\r";
-echo " Processing, please wait... ";
+echo " Processing, please wait  : ";
 $nombreArchivo = $adix;
 $contenido = file_get_contents($nombreArchivo);
 $contenido = strtoupper($contenido);
@@ -139,10 +139,23 @@ function sendcq()
     fclose($fp);
     return $sendcq = "1";
 }
+echo " -----> Testing country file : ";
 $csvPath =  __DIR__ . '/cty.csv';
-if (! file_exists($csvPath)) {
-    $csvData = file_get_contents('https://www.country-files.com/bigcty/cty.csv');
-    file_put_contents($csvPath, $csvData);
+if (@filesize($csvPath) === 0) {
+    unlink($csvPath);
+}
+if (!file_exists($csvPath)) {
+    echo "Download ";
+    $csvData = @file_get_contents('https://www.country-files.com/bigcty/cty.csv');
+    if ($csvData !== false) {
+        file_put_contents($csvPath, $csvData);
+        echo "[OK]\n\r";
+    } else {
+        echo "[ERROR]\n\r";
+        file_put_contents($csvPath, '');
+    }
+} else {
+    echo "[OK]\n\r";
 }
 function load_cty_array()
 {
@@ -195,31 +208,46 @@ echo fg("##################################################################", 4)
 echo "$robot $ipft port udp 2237\n\r";
 echo "$robot forward to 127.0.0.1 port udp 2277\n\r";
 echo fg("##################################################################", 1);
-echo " -----> Loading LOTW ";
+echo " -----> Testing LOTW user file : ";
+$llw = false;
 $csvPath =  __DIR__ . '/lotw-user-activity.csv';
-if (! file_exists($csvPath)) {
-    $csvData = file_get_contents('https://lotw.arrl.org/lotw-user-activity.csv');
-    file_put_contents($csvPath, $csvData);
+if (@filesize($csvPath) === 0) {
+    unlink($csvPath);
+}
+if (!file_exists($csvPath)) {
+    echo "Download ";
+    $csvData = @file_get_contents('https://lotw.arrl.org/lotw-user-activity.csv');
+    if ($csvData !== false) {
+        echo "[OK]\n\r";
+        file_put_contents($csvPath, $csvData);
+    } else {
+        echo "[ERROR]\n\r";
+        file_put_contents($csvPath, '');
+    }
+} else {
+    echo "[OK]\n\r";
 }
 $lotw = '';
-$currentDate = new DateTime();
-$fileHandle = fopen($csvPath, 'r');
-while (($line = fgets($fileHandle)) !== false) {
-    $columns = explode(',', $line);
-    if (count($columns) >= 3) {
-        $date = trim($columns [1]);
-        $dateTime = DateTime::createFromFormat('Y-m-d', $date);
-        $interval = $currentDate->diff($dateTime);
-        $monthsDifference = $interval->y * 12 + $interval->m;
-        if ($monthsDifference <= 6) {
-            $lotw .= trim($columns [0]) . ' ';
+if (filesize($csvPath) > 0) {
+    $currentDate = new DateTime();
+    $fileHandle = fopen($csvPath, 'r');
+    while (($line = fgets($fileHandle)) !== false) {
+        $columns = explode(',', $line);
+        if (count($columns) >= 3) {
+            $date = trim($columns [1]);
+            $dateTime = DateTime::createFromFormat('Y-m-d', $date);
+            $interval = $currentDate->diff($dateTime);
+            $monthsDifference = $interval->y * 12 + $interval->m;
+            if ($monthsDifference <= 6) {
+                $lotw .= trim($columns [0]) . ' ';
+            }
         }
     }
+    fclose($fileHandle);
+    $llw = true;
 }
-fclose($fileHandle);
-echo "[OK]\n\r";
 $fme = __DIR__ . '/lotw';
-if (file_exists($fme)) {
+if (file_exists($fme) && $llw !== false) {
     $lotwa = true;
     echo " -----> Call only active LOTW users\n\r";
 } else {
