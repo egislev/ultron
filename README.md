@@ -5,6 +5,8 @@
 **Contact:** castilloeduardo@outlook.com.ar  
 **License:** [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
+## [DONATE](https://www.paypal.com/donate/?hosted_button_id=WHG8FQRMAPA3E)
+
 Ayuda en español en la [Wiki!](https://github.com/lu9dce/ultron/wiki).
 
 ![ultron](https://pbs.twimg.com/media/F23jEfzWYAApY9t?format=webp&name=small)
