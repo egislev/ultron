@@ -99,43 +99,50 @@ Thank you for using ULTRON!
 
 "I am not liable for the use or inability to use this software or any other."
 
-## 😎 PHP
+## 😎 **PHP**
 
 **Windows:**
 
-**PHP Installation:**
+**PHP 8.2 Installation:**
 
-1. Download the PHP installer for Windows from the official PHP website (https://windows.php.net/download/).
+1. Download the PHP 8.2 installer for Windows from the official PHP website (https://windows.php.net/download/).
 2. Run the installer and follow the instructions to complete the installation. Make sure to add the PHP installation path to the system PATH during installation.
 
 **Adjust php.ini (if needed):**
 
-If your "robot.php" script requires specific configurations in the php.ini file, such as memory settings or execution limits, open the php.ini file in a text editor and make the necessary changes.
+- If your "robot.php" script requires specific configurations in the php.ini file, such as memory settings or execution limits, open the php.ini file in a text editor and make the necessary changes.
 
 **Running the Script:**
 
 1. Open the Command Prompt (cmd.exe).
-2. Navigate to the location where your "robot.php" file is located using the cd path\to\the\file command.
-3. Execute the script using the php robot.php command.
+2. Navigate to the location where your "robot.php" file is located using the `cd path\to\the\file` command.
+3. Execute the script using the `php robot.php` command.
 
 **Linux:**
 
-**PHP Installation:**
+**PHP 8.2 Installation:**
 
 1. Open the terminal.
-2. Execute the following command to install PHP: sudo apt-get install php (for Debian/Ubuntu-based systems).
-3. Alternatively, use the appropriate command for your system and package manager.
+2. Execute the following commands to add the Ondřej Surý repository and install PHP 8.2:
+
+   ```bash
+   sudo apt-get install ca-certificates apt-transport-https
+   wget -q https://packages.sury.org/php/apt.gpg -O- | sudo gpg --dearmor -o /usr/share/keyrings/php-archive-keyring.gpg
+   echo "deb [signed-by=/usr/share/keyrings/php-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/php.list
+   sudo apt update
+   sudo apt install php8.2 php8.2-cli php8.2-fpm php8.2-common php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath php8.2-xmlrpc php8.2-intl php8.2-soap php8.2-readline
+   ```
 
 **Adjust php.ini (if needed):**
 
-If your "robot.php" script requires specific configurations in the php.ini file, open the php.ini file in a terminal-based text editor like nano or vim, and make the necessary changes.
+- If your "robot.php" script requires specific configurations in the php.ini file, open the php.ini file in a terminal-based text editor like nano or vim, and make the necessary changes.
 
 **Running the Script:**
 
-1. In the terminal, navigate to the location where your "robot.php" file is located using the cd path/to/the/file command.
-2. Run the script using the php robot.php command.
+1. In the terminal, navigate to the location where your "robot.php" file is located using the `cd path/to/the/file` command.
+2. Run the script using the `php8.2 robot.php` command.
 
-Ensure that the "robot.php" file contains the PHP code you want to execute. If you need to adjust the php.ini file, make sure to do so before running the script so that the configurations take effect.
+Make sure that the "robot.php" file contains the PHP code you want to execute. If you need to adjust the php.ini file, make sure to do so before running the script so that the configurations take effect.
 
 ## 🙋‍♂️ Thinking
 
