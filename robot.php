@@ -33,7 +33,7 @@ static $iaia;
 static $exclu;
 static $tropa;
 $memoryUsageBytes = memory_get_usage();
-$version = "LR-230809";
+$version = "LR-230812";
 $portrx = "";
 $beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
@@ -286,7 +286,7 @@ if ($type == "00000002") {
     goto tdos;
 }
 if ($type == "00000005") {
-    shell_exec($beep);
+    //shell_exec($beep);
 }
 if ($type == "0000000c") {
     goto tdoce;
@@ -717,8 +717,8 @@ while (true) {
             shell_exec($command2);
             $ledvoff = 'sudo sh -c "echo 0 > /sys/class/leds/ACT/brightness"';
             $ledvon = 'sudo sh -c "echo 1 > /sys/class/leds/ACT/brightness"';
-            $ledroff = 'sudo sh -c "echo rfkill0 > /sys/class/leds/PWR/trigger"';
-            $ledron = 'sudo sh -c "echo heartbeat > /sys/class/leds/PWR/trigger"';
+            $ledroff = 'sudo sh -c "echo 0 > /sys/class/leds/PWR/brightness"';
+            $ledron = 'sudo sh -c "echo 1 > /sys/class/leds/PWR/brightness"';
         } else {
             echo fg("$robot LED control will not be activated", 4);
             $led = false;
