@@ -388,7 +388,7 @@ $con = $con + $ldxgridd;
 $watchdog = substr($lee, $con, 2);
 $watchdogd = hexdec($watchdog);
 if ($decodingd == "0" && $rxrx > "0") {
-    $qq = "$robot " . date("d/m/Y H:i:s") . " >-=-< $rxrx Decodeds";
+    $qq = "$robot " . date("d/m/Y H:i:s") . " --------------- " . sprintf("%04d", $rxrx) . " Decodeds --------";
     echo fg($qq, 6);
     $rxrx = 0;
 }
@@ -557,7 +557,18 @@ $qio = substr($qio . "                    ", 0, 25);
 if ($led) {
     shell_exec($ledvon);
 }
-$qq = "$timed  $snrd  $deltafd $moded$zz$messaged  - $lotd $qio";
+
+$modedx = trim($moded);
+if ($modedx == "`") { $modedx = "FST4  "; }
+if ($modedx == "+") { $modedx = "FT4   "; }
+if ($modedx == "~") { $modedx = "FT8   "; }
+if ($modedx == "$") { $modedx = "JT4   "; }
+if ($modedx == "@") { $modedx = "JT9   "; }
+if ($modedx == "#") { $modedx = "JT65  "; }
+if ($modedx == ":") { $modedx = "Q65   "; }
+if ($modedx == "&") { $modedx = "MSK144"; }
+
+$qq = "$timed  $snrd  $deltafd $modedx$zz$messaged  - $lotd $qio";
 if ($led) {
     shell_exec($ledvoff);
 }
