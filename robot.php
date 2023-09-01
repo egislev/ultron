@@ -32,6 +32,7 @@ $decalld = "";
 static $iaia;
 static $exclu;
 static $tropa;
+$mica = str_repeat("#", 78);
 $memoryUsageBytes = memory_get_usage();
 $version = "LR-230812";
 $portrx = "";
@@ -71,23 +72,28 @@ function fg($text, $color)
         $out = "[90m"; // Bright Black (Gray)
     }
     if ($color == "9") {
-        $out = "[91m"; // Bright Red
+        $out = "[91m"; // Bright Green
+    }
+    if ($color == "10") {
+        $out = "[32;5m"; // Red blink
     }
     return chr(27) . "$out" . "$text" . chr(27) . "[0m\n\r";
 }
-echo "\n\r";
-echo fg("##################################################################", 1);
+for ($i = 0; $i < 40; $i++) {
+    echo "\n\r";
+}
+echo fg($mica, 1);
 echo " Created by Eduardo Castillo - LU9DCE\n\r";
 echo " (C) 2023 - castilloeduardo@outlook.com.ar\n\r";
-echo fg("------------------------------------------------------------------", 1);
+echo fg($mica, 1);
 echo "$robot Preparing :";
 echo " Version $version\n\r";
 echo " Looking for radio software wait ...";
 goto test;
 contr:
-echo fg("------------------------------------------------------------------", 5);
+echo fg($mica, 5);
 echo "$robot Ctrl + C to exit\n\r";
-echo fg("##################################################################", 1);
+echo fg($mica, 1);
 echo " -----> Info\n\r";
 echo " -----> CQ active (0=NO/1=YES) - N\n\r";
 echo " -----> Response time          - NNNN\n\r";
@@ -95,7 +101,7 @@ echo " -----> Time that ends         - NNNN\n\r";
 echo " -----> Current time           - NNNN\n\r";
 echo " -----> Contacts made          - NN\n\r";
 echo " -----> Memory usage (MB)      - NNN\n\r";
-echo fg("##################################################################", 1);
+echo fg($mica, 1);
 echo " ADI    : $adix\n\r";
 echo " Processing, please wait  : ";
 $nombreArchivo = $adix;
@@ -128,7 +134,7 @@ unlink($nombreArchivo);
 rename("mio.adi", $nombreArchivo);
 echo "[OK]\n\r";
 echo " PortRx : $portrx\n\r";
-echo fg("##################################################################", 4);
+echo fg($mica, 4);
 function sendcq()
 {
     global $ipft, $portrx, $magic, $ver, $largoid, $id, $time, $snr, $deltat, $deltaf, $lmode, $mode, $ml, $message, $low, $off;
@@ -204,10 +210,10 @@ while (($line = fgets($fileHandle)) !== false) {
 fclose($fileHandle);
 echo "$robot Watchdog = 90s\n\r";
 echo "$robot Pls disable watchdog of $soft\n\r";
-echo fg("##################################################################", 4);
+echo fg($mica, 4);
 echo "$robot $ipft port udp 2237\n\r";
 echo "$robot forward to 127.0.0.1 port udp 2277\n\r";
-echo fg("##################################################################", 1);
+echo fg($mica, 1);
 echo " -----> Testing LOTW user file : ";
 $llw = false;
 $csvPath =  __DIR__ . '/lotw-user-activity.csv';
@@ -254,7 +260,7 @@ if (file_exists($fme) && $llw !== false) {
     $lotwa = false;
     echo " -----> Call all active users\n\r";
 }
-echo fg("##################################################################", 1);
+echo fg($mica, 1);
 $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_bind($socket, '0.0.0.0', 2237);
 $read = [
@@ -388,7 +394,7 @@ $con = $con + $ldxgridd;
 $watchdog = substr($lee, $con, 2);
 $watchdogd = hexdec($watchdog);
 if ($decodingd == "0" && $rxrx > "0") {
-    $qq = "$robot " . date("d/m/Y H:i:s") . " --------------- " . sprintf("%04d", $rxrx) . " Decodeds --------";
+    $qq = "$robot " . date("Y-m-d H:i:s") . " --------------- " . sprintf("%04d", $rxrx) . " Decodeds -----------";
     echo fg($qq, 6);
     $rxrx = 0;
 }
@@ -430,7 +436,6 @@ $snr = substr($lee, $con, 8);
 $snrd = unpack("l", pack("l", hexdec($snr))) [1];
 $con = $con + 8;
 $deltat = substr($lee, $con, 16);
-// $deltatd = number_format ( round ( unpack ( "d", pack ( "Q", hexdec ( $deltat ) ) ) [1], 1 ), 1 );
 $con = $con + 16;
 $deltaf = substr($lee, $con, 8);
 $deltafd = unpack("l", pack("l", hexdec($deltaf))) [1];
@@ -458,7 +463,7 @@ $rxrx = $rxrx + 1;
 $tdx = "0";
 goto trama;
 tcua:
-if ($zz == ">> ") {
+if ($zz == ">>") {
     sendcq();
 }
 $sendcq = "1";
@@ -468,7 +473,7 @@ $tempo = strtotime("now");
 $tempu = $tempo + 90;
 goto trama;
 tcin:
-echo fg("$robot Successful contact @ $dxc", 2);
+echo fg("$robot Successful contact @ $dxc", 10);
 goto trama;
 toch:
 $fp = stream_socket_client("udp://$ipft:$portrx", $errno, $errstr);
@@ -507,34 +512,34 @@ if (sizeof($lin) == 4) {
     $lin = array_values($lin);
 }
 if (isset($iaia [$lin [1]]) && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = "-- ";
+    $zz = "--";
     $fg = "1";
     goto shsh;
 }
 $searchfor = $lin [1];
 if (strpos($contents, $searchfor) !== false && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = "-- ";
+    $zz = "--";
     $fg = "1";
     $iaia [$lin [1]] = $lin [1];
 }
 if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = "-> ";
+    $zz = "->";
     $fg = "7";
 }
 if ($lotwa === true && strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && $lotdc == "1" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = ">> ";
+    $zz = ">>";
     $fg = "2";
 }
 if ($lotwa === false && strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = ">> ";
+    $zz = ">>";
     $fg = "2";
 }
 if ($snrd <= "-20" && $zz == ">> ") {
-    $zz = "Lo ";
+    $zz = "Lo";
     $fg = "3";
 }
 if (isset($exclu [$lin [1]])) {
-    $zz = "XX ";
+    $zz = "XX";
     $fg = "4";
 }
 if (strpos($messaged, $dxc) !== false && $sendcq == "1") {
@@ -547,28 +552,43 @@ if (isset($tropa [$lin [1]])) {
     $qio = locate($lin [1]);
     $tropa [$lin [1]] = $qio;
 }
-$timed = substr($timed . "                    ", 0, 6);
-$snrd = substr($snrd . "                    ", 0, 3);
-// $deltatd = substr ( $deltatd . " ", 0, 4 );
-$deltafd = substr($deltafd . "                    ", 0, 4);
-$moded = substr($moded . "                    ", 0, 4);
-$messaged = substr($messaged . "                    ", 0, 18);
-$qio = substr($qio . "                    ", 0, 25);
 if ($led) {
     shell_exec($ledvon);
 }
-
 $modedx = trim($moded);
-if ($modedx == "`") { $modedx = "FST4  "; }
-if ($modedx == "+") { $modedx = "FT4   "; }
-if ($modedx == "~") { $modedx = "FT8   "; }
-if ($modedx == "$") { $modedx = "JT4   "; }
-if ($modedx == "@") { $modedx = "JT9   "; }
-if ($modedx == "#") { $modedx = "JT65  "; }
-if ($modedx == ":") { $modedx = "Q65   "; }
-if ($modedx == "&") { $modedx = "MSK144"; }
-
-$qq = "$timed  $snrd  $deltafd $modedx$zz$messaged  - $lotd $qio";
+if ($modedx == "`") {
+    $modedx = "FST4";
+}
+if ($modedx == "+") {
+    $modedx = "FT4";
+}
+if ($modedx == "~") {
+    $modedx = "FT8";
+}
+if ($modedx == "$") {
+    $modedx = "JT4";
+}
+if ($modedx == "@") {
+    $modedx = "JT9";
+}
+if ($modedx == "#") {
+    $modedx = "JT65";
+}
+if ($modedx == ":") {
+    $modedx = "Q65";
+}
+if ($modedx == "&") {
+    $modedx = "MSK144";
+}
+$timed = str_pad(substr($timed, 0, 6), 6);
+$snrd = str_pad(substr($snrd, 0, 3), 3);
+$deltafd = str_pad(substr($deltafd, 0, 4), 4);
+$moded = str_pad(substr($moded, 0, 4), 4);
+$messaged = str_pad(substr($messaged, 0, 20), 20);
+$zz = str_pad(substr($zz, 0, 2), 2);
+$qio = str_pad(substr($qio, 0, 20), 20);
+$modedx = str_pad(substr($modedx, 0, 6), 6);
+$qq = "$timed  $snrd  $deltafd  $modedx  $zz $messaged - $lotd $qio";
 if ($led) {
     shell_exec($ledvoff);
 }
@@ -579,7 +599,7 @@ if ($lin [0] != $decalld && $lin [0] != "CQ" && $lin [1] == $dxc && ($lin [2] !=
     goto toch;
 }
 if ($lin [0] == $decalld && $lin [2] == "73") {
-    echo fg("$robot Qso confirmed successfully", 2);
+    echo fg("$robot Qso confirmed successfully", 10);
     $mega = $mega + 1;
     $sendcq = "0";
     $tempo = "0000";
@@ -588,9 +608,9 @@ if ($lin [0] == $decalld && $lin [2] == "73") {
 }
 if ($lin [0] == $decalld && $lin [2] != "73" && $sendcq == "0") {
     echo fg("$robot Reply? @ $lin[1]", 6);
-    $zz = ">> ";
+    $zz = ">>";
 }
-if ($zz == ">> " && $sendcq == "0") {
+if ($zz == ">>" && $sendcq == "0") {
     $dxc = $lin [1];
     goto tcua;
 }
@@ -702,7 +722,7 @@ while (true) {
         echo " Mode : $datamode\n\r";
         echo " Freq : $datafreq\n\r";
         $isRaspberryPi = false;
-        echo fg("------------------------------------------------------------------", 5);
+        echo fg($mica, 5);
         if (stripos(PHP_OS, 'Linux') !== false) {
             if (is_readable('/sys/firmware/devicetree/base/model')) {
                 $model = trim(file_get_contents('/sys/firmware/devicetree/base/model'));
@@ -739,7 +759,7 @@ while (true) {
 }
 socket_close($socket);
 tdoce:
-echo fg("$robot Successful contact @ $dxc", 2);
+echo fg("$robot Successful contact @ $dxc", 10);
 $datos = hex2bin($lee);
 $lineas = explode("\n", $datos);
 $linea_encontrada = '';
