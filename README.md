@@ -14,8 +14,6 @@
 
 Ayuda en español en la [Wiki!](https://github.com/lu9dce/ultron/wiki).
 
-[I recommend Autospot to you AUTOSPOT](https://github.com/lu9dce/autospot)
-
 ![ultron](https://pbs.twimg.com/media/F23jEfzWYAApY9t?format=webp&name=small)
 
 ## 📜 Description
