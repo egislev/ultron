@@ -6,7 +6,7 @@
 
 **Contact:** castilloeduardo@outlook.com.ar  
 
-**License:** (https://creativecommons.org/licenses/by-nc-nd/4.0/
+**License:** https://creativecommons.org/licenses/by-nc-nd/4.0/
 
 **I recommend AUTOSPOT:** https://github.com/lu9dce/autospot
 
