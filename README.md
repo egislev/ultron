@@ -1,9 +1,14 @@
 # ULTRON - Automatic Control of JTDX/WSJT-X/MSHV 🤖
 
-**Created by:** LU9DCE  
+**Created by:** https://lu9dce.github.io/
+
 **Copyright:** 2023 Eduardo Castillo  
+
 **Contact:** castilloeduardo@outlook.com.ar  
-**License:** [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+**License:** (https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+**I recommend AUTOSPOT:** https://github.com/lu9dce/autospot
 
 ## [DONATE](https://www.paypal.com/donate/?hosted_button_id=WHG8FQRMAPA3E)
 
