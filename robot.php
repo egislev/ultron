@@ -33,8 +33,7 @@ static $iaia;
 static $exclu;
 static $tropa;
 $mica = str_repeat("#", 78);
-$memoryUsageBytes = memory_get_usage();
-$version = "LR-230812";
+$version = "LR-230918";
 $portrx = "";
 $beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
@@ -99,8 +98,7 @@ echo " -----> CQ active (0=NO/1=YES) - N\n\r";
 echo " -----> Response time          - NNNN\n\r";
 echo " -----> Time that ends         - NNNN\n\r";
 echo " -----> Current time           - NNNN\n\r";
-echo " -----> Contacts made          - NN\n\r";
-echo " -----> Memory usage (MB)      - NNN\n\r";
+echo " -----> Contacts made to day   - NN\n\r";
 echo fg($mica, 1);
 echo " ADI    : $adix\n\r";
 echo " Processing, please wait  : ";
@@ -300,8 +298,10 @@ if ($type == "0000000c") {
 goto trama;
 tcero:
 $info = strtotime("now");
-$memoryUsageMB = round($memoryUsageBytes / 1024 / 1024, 2);
-$qq = "$robot $soft = $sendcq-" . substr($tempo, - 4) . "-" . substr($tempu, - 4) . "-" . substr($info, - 4) . "-$mega-$memoryUsageMB";
+if (date("H:i") === "00:00") {
+    $mega = "0";
+}
+$qq = "$robot $soft = $sendcq-" . substr($tempo, - 4) . "-" . substr($tempu, - 4) . "-" . substr($info, - 4) . "-" . $mega ;
 echo fg($qq, 7);
 if ($sendcq == "1" && $info > $tempu) {
     goto dog;
