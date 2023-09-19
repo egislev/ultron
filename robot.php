@@ -33,7 +33,7 @@ static $iaia;
 static $exclu;
 static $tropa;
 $mica = str_repeat("#", 78);
-$version = "LR-230918";
+$version = "LR-230919";
 $portrx = "";
 $beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
@@ -771,6 +771,7 @@ foreach ($lineas as $linea) {
 }
 $outputadi = $linea_encontrada;
 $outputadi .= "\n";
+$outputadi = strtoupper($outputadi);
 file_put_contents($adix, $outputadi, FILE_APPEND);
 $pattern = '/<CALL:(\d+)>([^<]+)/';
 $matches = [ ];
