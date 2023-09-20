@@ -35,7 +35,6 @@ static $tropa;
 $mica = str_repeat("#", 78);
 $version = "LR-230919";
 $portrx = "";
-$beep = "play -n synth 1 sine 1200 2>&1 >/dev/null";
 $filename = __DIR__ . '/wsjtx_log.adi';
 if (! file_exists($filename)) {
     file_put_contents($filename, '');
@@ -78,6 +77,52 @@ function fg($text, $color)
     }
     return chr(27) . "$out" . "$text" . chr(27) . "[0m\n\r";
 }
+function procqso($data)
+{
+    $data = strtoupper($data);
+    $regex = '/<([A-Z0-9_]+):(\d+)(:[A-Z])?>([^<]+)\s*/';
+    preg_match_all($regex, $data, $matches, PREG_SET_ORDER);
+    $qsos = array();
+    $qso = array();
+    foreach ($matches as $i => $match) {
+        $field = strtolower($match[1]);
+        $length = $match[2];
+        $type = $match[3];
+        $content = $match[4];
+        $qso[$field] = $content;
+        $is_last_element = ($i === count($matches) - 1);
+        if ($is_last_element || ($i < count($matches) - 1 && $matches[$i + 1][1] === 'EOR')) {
+            $qsos[] = $qso;
+            $qso = array();
+        }
+    }
+    return $qsos;
+}
+function genadi($qsos)
+{
+    $adi_entries = array_map(function ($qso) {
+        $adi_entry = '';
+        foreach ($qso as $field => $content) {
+            $content = trim($content);
+            $field_length = strlen($content);
+            $adi_entry .= "<$field:" . $field_length . ">$content ";
+        }
+        $adi_entry .= '<eor>';
+        return $adi_entry;
+    }, $qsos);
+    return $adi_entries;
+}
+function qsotovar($array)
+{
+    $variables = [];
+    foreach ($array as $campo => $valor) {
+        $valor = rtrim($valor);
+        global ${$campo};
+        ${$campo} = $valor;
+        $variables[$campo] = $valor;
+    }
+    return $variables;
+}
 for ($i = 0; $i < 40; $i++) {
     echo "\n\r";
 }
@@ -102,35 +147,19 @@ echo " -----> Contacts made to day   - NN\n\r";
 echo fg($mica, 1);
 echo " ADI    : $adix\n\r";
 echo " Processing, please wait  : ";
-$nombreArchivo = $adix;
-$contenido = file_get_contents($nombreArchivo);
-$contenido = strtoupper($contenido);
-$contenido = str_replace(array("\r\n", "\r", "\n", "\r"), ' ', $contenido);
-$registros = explode("<EOR>", $contenido);
-$archivoSalida = fopen("mio.adi", "w");
-foreach ($registros as $registro) {
-    if (!empty($registro)) {
-        $appLotwPos = strpos($registro, "<APP_LOTW_EOF>");
-        if ($appLotwPos !== false) {
-            $registro = substr($registro, $appLotwPos + 14);
-            $registro = ltrim($registro);
-        }
-        if (strpos($registro, "<EOH>") !== false) {
-            $registro = substr($registro, strpos($registro, "<EOH>") + 5);
-        }
-        if ($registro[0] === ' ') {
-            $registro = ltrim($registro);
-        }
-        if (!empty($registro)) {
-            $registroCompleto = $registro . "<EOR>\n";
-            fwrite($archivoSalida, $registroCompleto);
-        }
+$cotcot = 0;
+$contents = "";
+$archivoEntrada = fopen($adix, 'r');
+while (($linea = fgets($archivoEntrada)) !== false) {
+    if (strpos($linea, '<eor>') !== false || strpos($linea, '<EOR>') !== false) {
+        $linea = procqso($linea);
+        $linea = qsotovar($linea[0]);
+        $contents .= $call;
+        $cotcot++;
     }
 }
-fclose($archivoSalida);
-unlink($nombreArchivo);
-rename("mio.adi", $nombreArchivo);
 echo "[OK]\n\r";
+echo " $cotcot Processed contacts\n\r";
 echo " PortRx : $portrx\n\r";
 echo fg($mica, 4);
 function sendcq()
@@ -190,74 +219,11 @@ function locate($licrx)
     }
     return "??";
 }
-$regex = '/<([A-Z0-9_]+):(\d+)>([^<\s]+)\s*/';
-$contents = '';
-$fileHandle = fopen($adix, 'r');
-while (($line = fgets($fileHandle)) !== false) {
-    $line = strtoupper($line);
-    preg_match_all($regex, $line, $matches, PREG_SET_ORDER);
-    foreach ($matches as $match) {
-        $tag = $match [1];
-        $length = ( int ) $match [2];
-        $value = substr($match [3], 0, $length);
-        if ($tag === 'CALL') {
-            $contents .= $value . " ";
-        }
-    }
-}
-fclose($fileHandle);
 echo "$robot Watchdog = 90s\n\r";
 echo "$robot Pls disable watchdog of $soft\n\r";
 echo fg($mica, 4);
 echo "$robot $ipft port udp 2237\n\r";
 echo "$robot forward to 127.0.0.1 port udp 2277\n\r";
-echo fg($mica, 1);
-echo " -----> Testing LOTW user file : ";
-$llw = false;
-$csvPath =  __DIR__ . '/lotw-user-activity.csv';
-if (@filesize($csvPath) === 0) {
-    unlink($csvPath);
-}
-if (!file_exists($csvPath)) {
-    echo "Download ";
-    $csvData = @file_get_contents('https://lotw.arrl.org/lotw-user-activity.csv');
-    if ($csvData !== false) {
-        echo "[OK]\n\r";
-        file_put_contents($csvPath, $csvData);
-    } else {
-        echo "[ERROR]\n\r";
-        file_put_contents($csvPath, '');
-    }
-} else {
-    echo "[OK]\n\r";
-}
-$lotw = '';
-if (filesize($csvPath) > 0) {
-    $currentDate = new DateTime();
-    $fileHandle = fopen($csvPath, 'r');
-    while (($line = fgets($fileHandle)) !== false) {
-        $columns = explode(',', $line);
-        if (count($columns) >= 3) {
-            $date = trim($columns [1]);
-            $dateTime = DateTime::createFromFormat('Y-m-d', $date);
-            $interval = $currentDate->diff($dateTime);
-            $monthsDifference = $interval->y * 12 + $interval->m;
-            if ($monthsDifference <= 6) {
-                $lotw .= trim($columns [0]) . ' ';
-            }
-        }
-    }
-    fclose($fileHandle);
-    $llw = true;
-}
-$fme = __DIR__ . '/lotw';
-if (file_exists($fme) && $llw !== false) {
-    $lotwa = true;
-    echo " -----> Call only active LOTW users\n\r";
-} else {
-    $lotwa = false;
-    echo " -----> Call all active users\n\r";
-}
 echo fg($mica, 1);
 $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_bind($socket, '0.0.0.0', 2237);
@@ -290,7 +256,7 @@ if ($type == "00000002") {
     goto tdos;
 }
 if ($type == "00000005") {
-    //shell_exec($beep);
+    //goto tcin;
 }
 if ($type == "0000000c") {
     goto tdoce;
@@ -472,9 +438,6 @@ echo fg("$robot I see @ $dxc in $qio", 9);
 $tempo = strtotime("now");
 $tempu = $tempo + 90;
 goto trama;
-tcin:
-echo fg("$robot Successful contact @ $dxc", 10);
-goto trama;
 toch:
 $fp = stream_socket_client("udp://$ipft:$portrx", $errno, $errstr);
 $msg = "$magic$ver" . "00000008" . "$largoid$id" . "00";
@@ -500,13 +463,6 @@ $mess = rtrim($messaged);
 $lin = explode(" ", $mess);
 $zz = "   ";
 $fg = "8";
-if (strpos($lotw, $lin [1]) !== false) {
-    $lotd = "[L]";
-    $lotdc = "1";
-} else {
-    $lotd = "[ ]";
-    $lotdc = "0";
-}
 if (sizeof($lin) == 4) {
     unset($lin [1]);
     $lin = array_values($lin);
@@ -526,11 +482,7 @@ if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != 
     $zz = "->";
     $fg = "7";
 }
-if ($lotwa === true && strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && $lotdc == "1" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
-    $zz = ">>";
-    $fg = "2";
-}
-if ($lotwa === false && strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
+if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
     $zz = ">>";
     $fg = "2";
 }
@@ -588,7 +540,7 @@ $messaged = str_pad(substr($messaged, 0, 20), 20);
 $zz = str_pad(substr($zz, 0, 2), 2);
 $qio = str_pad(substr($qio, 0, 20), 20);
 $modedx = str_pad(substr($modedx, 0, 6), 6);
-$qq = "$timed  $snrd  $deltafd  $modedx  $zz $messaged - $lotd $qio";
+$qq = "$timed  $snrd  $deltafd  $modedx  $zz $messaged - $qio";
 if ($led) {
     shell_exec($ledvoff);
 }
@@ -759,28 +711,14 @@ while (true) {
 }
 socket_close($socket);
 tdoce:
-echo fg("$robot Successful contact @ $dxc", 10);
 $datos = hex2bin($lee);
-$lineas = explode("\n", $datos);
-$linea_encontrada = '';
-foreach ($lineas as $linea) {
-    if (strpos($linea, '<') === 0 && strpos($linea, '<EOR>') !== false) {
-        $linea_encontrada = $linea;
-        break;
-    }
-}
-$outputadi = $linea_encontrada;
-$outputadi .= "\n";
-$outputadi = strtoupper($outputadi);
-file_put_contents($adix, $outputadi, FILE_APPEND);
-$pattern = '/<CALL:(\d+)>([^<]+)/';
-$matches = [ ];
-if (preg_match($pattern, $outputadi, $matches)) {
-    $length = intval($matches [1]);
-    $call = substr($matches [2], 0, $length);
-    $dxc = $call;
-}
-$contents .= $dxc . " ";
+$datosa = procqso($datos);
+$datosb = genadi($datosa);
+$datosc = $datosb[0];
+qsotovar($datosa[0]);
+file_put_contents($adix, $datosc . "\n", FILE_APPEND);
+$contents .= $call . " ";
+echo fg("$robot $soft Register a contact in log for $dxc", 10);
 goto trama;
 /*
 [PHP Modules]

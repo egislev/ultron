@@ -16,6 +16,22 @@ Ayuda en español en la [Wiki!](https://github.com/lu9dce/ultron/wiki).
 
 ![ultron](https://pbs.twimg.com/media/F23jEfzWYAApY9t?format=webp&name=small)
 
+## ⚙️ To run PHP in an optimized way, use the following commands:
+
+To run it directly in the command line:
+
+```bash
+php -d opcache.enable_cli=1 -d opcache.jit_buffer_size=64M -d opcache.jit=1255 -d memory_limit=-1 robot.php
+```
+
+For example, to run it in the background, you can use:
+
+```bash
+tmux new-session -d -s robot 'cd /root/ultron && php -d opcache.enable_cli=1 -d opcache.jit_buffer_size=64M -d opcache.jit=1255 -d memory_limit=-1 robot.php > /dev/tty1 && tmux detach-client'
+```
+
+These commands will help you run your PHP script with optimizations either in the foreground or in the background using tmux.
+
 ## 📜 Description
 
 ULTRON is a sophisticated software tool designed for **remotely or locally controlling programs like JTDX, MSHV, and WSJT-X**. It offers seamless operation on both **Windows and Linux platforms**, supporting both 32-bit and 64-bit versions. The software relies on the **latest version of PHP** for optimal performance.
@@ -56,8 +72,6 @@ Before utilizing ULTRON, please ensure the following prerequisites are met:
   - Enable transmission of logged QSO ADIF data
   - Do not filter UDP data
   - Adjust firewall settings to facilitate data flow
-
-To ensure ULTRON makes calls only to contacts belonging to **LoTW (Logbook of The World)**, create an empty file named "**lotw**" within the same folder.
 
 ## 📋 Details
 
