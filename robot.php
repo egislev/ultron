@@ -36,7 +36,7 @@ $mica = str_repeat("#", 78);
 $version = "LR-230919";
 $portrx = "";
 $filename = __DIR__ . '/wsjtx_log.adi';
-if (! file_exists($filename)) {
+if (!file_exists($filename)) {
     file_put_contents($filename, '');
 }
 $adix = realpath($filename);
@@ -173,7 +173,7 @@ function sendcq()
     return $sendcq = "1";
 }
 echo " -----> Testing country file : ";
-$csvPath =  __DIR__ . '/cty.csv';
+$csvPath = __DIR__ . '/cty.csv';
 if (@filesize($csvPath) === 0) {
     unlink($csvPath);
 }
@@ -197,10 +197,10 @@ function load_cty_array()
     $handle = fopen($dirt, "r");
     while (($raw_string = fgets($handle)) !== false) {
         $row = str_getcsv($raw_string);
-        $array = explode(' ', $row [9]);
+        $array = explode(' ', $row[9]);
         foreach ($array as &$value) {
             $value = str_replace(';', '', $value);
-            $cty_array [$value] = $row [1];
+            $cty_array[$value] = $row[1];
         }
     }
     fclose($handle);
@@ -211,10 +211,10 @@ function locate($licrx)
 {
     global $cty_array;
     $z = strlen($licrx);
-    for($i = $z; $i >= 1; $i --) {
+    for ($i = $z; $i >= 1; $i--) {
         $licrx = substr($licrx, 0, $i);
-        if (isset($cty_array [$licrx])) {
-            return $cty_array [$licrx];
+        if (isset($cty_array[$licrx])) {
+            return $cty_array[$licrx];
         }
     }
     return "??";
@@ -228,7 +228,7 @@ echo fg($mica, 1);
 $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_bind($socket, '0.0.0.0', 2237);
 $read = [
-        $socket
+    $socket,
 ];
 $socketx = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 $write = null;
@@ -267,7 +267,7 @@ $info = strtotime("now");
 if (date("H:i") === "00:00") {
     $mega = "0";
 }
-$qq = "$robot $soft = $sendcq-" . substr($tempo, - 4) . "-" . substr($tempu, - 4) . "-" . substr($info, - 4) . "-" . $mega ;
+$qq = "$robot $soft = $sendcq-" . substr($tempo, -4) . "-" . substr($tempu, -4) . "-" . substr($info, -4) . "-" . $mega;
 echo fg($qq, 7);
 if ($sendcq == "1" && $info > $tempu) {
     goto dog;
@@ -399,12 +399,12 @@ $seconds = ceil($mil / 1000);
 $timed = date("His", $seconds);
 $con = $con + 8;
 $snr = substr($lee, $con, 8);
-$snrd = unpack("l", pack("l", hexdec($snr))) [1];
+$snrd = unpack("l", pack("l", hexdec($snr)))[1];
 $con = $con + 8;
 $deltat = substr($lee, $con, 16);
 $con = $con + 16;
 $deltaf = substr($lee, $con, 8);
-$deltafd = unpack("l", pack("l", hexdec($deltaf))) [1];
+$deltafd = unpack("l", pack("l", hexdec($deltaf)))[1];
 $con = $con + 8;
 $lmode = substr($lee, $con, 8);
 $lmoded = hexdec($lmode) * 2;
@@ -455,7 +455,7 @@ echo fg("$robot Halt Tx", 5);
 goto trama;
 dog:
 echo fg("$robot $dxc Not respond to the call", 5);
-$exclu [$dxc] = $dxc;
+$exclu[$dxc] = $dxc;
 $dxc = "";
 goto toch;
 ptex:
@@ -464,25 +464,25 @@ $lin = explode(" ", $mess);
 $zz = "   ";
 $fg = "8";
 if (sizeof($lin) == 4) {
-    unset($lin [1]);
+    unset($lin[1]);
     $lin = array_values($lin);
 }
-if (isset($iaia [$lin [1]]) && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
+if (isset($iaia[$lin[1]]) && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
     $zz = "--";
     $fg = "1";
     goto shsh;
 }
-$searchfor = $lin [1];
-if (strpos($contents, $searchfor) !== false && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
+$searchfor = $lin[1];
+if (strpos($contents, $searchfor) !== false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
     $zz = "--";
     $fg = "1";
-    $iaia [$lin [1]] = $lin [1];
+    $iaia[$lin[1]] = $lin[1];
 }
-if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
+if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
     $zz = "->";
     $fg = "7";
 }
-if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin [1] != $decalld && $sendcq == "0" && ($lin [0] == "CQ" || $lin [2] == "73" || $lin [2] == "RR73")) {
+if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && $sendcq == "0" && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
     $zz = ">>";
     $fg = "2";
 }
@@ -490,7 +490,7 @@ if ($snrd <= "-20" && $zz == ">> ") {
     $zz = "Lo";
     $fg = "3";
 }
-if (isset($exclu [$lin [1]])) {
+if (isset($exclu[$lin[1]])) {
     $zz = "XX";
     $fg = "4";
 }
@@ -498,11 +498,11 @@ if (strpos($messaged, $dxc) !== false && $sendcq == "1") {
     $fg = "2";
 }
 shsh:
-if (isset($tropa [$lin [1]])) {
-    $qio = $tropa [$lin [1]];
+if (isset($tropa[$lin[1]])) {
+    $qio = $tropa[$lin[1]];
 } else {
-    $qio = locate($lin [1]);
-    $tropa [$lin [1]] = $qio;
+    $qio = locate($lin[1]);
+    $tropa[$lin[1]] = $qio;
 }
 if ($led) {
     shell_exec($ledvon);
@@ -545,12 +545,12 @@ if ($led) {
     shell_exec($ledvoff);
 }
 echo fg($qq, $fg);
-if ($lin [0] != $decalld && $lin [0] != "CQ" && $lin [1] == $dxc && ($lin [2] != "73" || $lin [2] != "RR73")) {
+if ($lin[0] != $decalld && $lin[0] != "CQ" && $lin[1] == $dxc && ($lin[2] != "73" || $lin[2] != "RR73")) {
     echo fg("$robot Busy?", 4);
     $dxc = "";
     goto toch;
 }
-if ($lin [0] == $decalld && $lin [2] == "73") {
+if ($lin[0] == $decalld && $lin[2] == "73") {
     echo fg("$robot Qso confirmed successfully", 10);
     $mega = $mega + 1;
     $sendcq = "0";
@@ -558,12 +558,12 @@ if ($lin [0] == $decalld && $lin [2] == "73") {
     $tempu = "0000";
     goto toch;
 }
-if ($lin [0] == $decalld && $lin [2] != "73" && $sendcq == "0") {
+if ($lin[0] == $decalld && $lin[2] != "73" && $sendcq == "0") {
     echo fg("$robot Reply? @ $lin[1]", 6);
     $zz = ">>";
 }
 if ($zz == ">>" && $sendcq == "0") {
-    $dxc = $lin [1];
+    $dxc = $lin[1];
     goto tcua;
 }
 goto utex;
@@ -660,7 +660,7 @@ while (true) {
         $watchdog = substr($lee, $con, 2);
         $watchdogd = hexdec($watchdog);
         $datamode = $moded;
-        $datafreq = substr($freqd, 0, - 3);
+        $datafreq = substr($freqd, 0, -3);
         $datacall = $decalld;
         $soft = $idd;
         $datagrid = $degridd;
@@ -767,4 +767,4 @@ xsl
 Zend OPcache
 zip
 zlib
-*/
+ */
