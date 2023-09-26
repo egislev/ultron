@@ -219,6 +219,15 @@ function locate($licrx)
     }
     return "??";
 }
+function vicen($licencia)
+{
+    $patron = '/^[A-Z]{1,2}\d{1}[A-Z]{1,3}$/i';
+    if (preg_match($patron, $licencia)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 echo "$robot Watchdog = 90s\n\r";
 echo "$robot Pls disable watchdog of $soft\n\r";
 echo fg($mica, 4);
@@ -496,6 +505,10 @@ if (isset($exclu[$lin[1]])) {
 }
 if (strpos($messaged, $dxc) !== false && $sendcq == "1") {
     $fg = "2";
+}
+if (!vicen($lin[1])) {
+    $zz = "FL";
+    $fg = "8";
 }
 shsh:
 if (isset($tropa[$lin[1]])) {
