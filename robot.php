@@ -33,7 +33,7 @@ static $iaia;
 static $exclu;
 static $tropa;
 $mica = str_repeat("#", 78);
-$version = "LR-230919";
+$version = "LR-230925";
 $portrx = "";
 $filename = __DIR__ . '/wsjtx_log.adi';
 if (!file_exists($filename)) {
@@ -486,7 +486,7 @@ if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $
     $zz = ">>";
     $fg = "2";
 }
-if ($snrd <= "-20" && $zz == ">> ") {
+if (intval(trim($snrd)) <= -20 && $zz == ">> ") {
     $zz = "Lo";
     $fg = "3";
 }
