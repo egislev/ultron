@@ -476,22 +476,22 @@ if (sizeof($lin) == 4) {
     unset($lin[1]);
     $lin = array_values($lin);
 }
-if (isset($iaia[$lin[1]]) && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
+if (isset($iaia[$lin[1]]) && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73" || $lin[2] == "RRR")) {
     $zz = "--";
     $fg = "1";
     goto shsh;
 }
 $searchfor = $lin[1];
-if (strpos($contents, $searchfor) !== false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
+if (strpos($contents, $searchfor) !== false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73" || $lin[2] == "RRR")) {
     $zz = "--";
     $fg = "1";
     $iaia[$lin[1]] = $lin[1];
 }
-if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
+if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73" || $lin[2] == "RRR")) {
     $zz = "->";
     $fg = "7";
 }
-if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && $sendcq == "0" && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73")) {
+if (strpos($contents, $searchfor) === false && sizeof($lin) == 3 && $lin[1] != $decalld && $sendcq == "0" && ($lin[0] == "CQ" || $lin[2] == "73" || $lin[2] == "RR73" || $lin[2] == "RRR")) {
     $zz = ">>";
     $fg = "2";
 }
@@ -503,12 +503,12 @@ if (isset($exclu[$lin[1]])) {
     $zz = "XX";
     $fg = "4";
 }
-if (strpos($messaged, $dxc) !== false && $sendcq == "1") {
-    $fg = "2";
-}
 if (!vicen($lin[1])) {
     $zz = "FL";
     $fg = "8";
+}
+if (strpos($messaged, $dxc) !== false && $sendcq == "1") {
+    $fg = "2";
 }
 shsh:
 if (isset($tropa[$lin[1]])) {
